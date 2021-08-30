@@ -96,8 +96,8 @@ public class TIROStaticAnalysis {
         //   cg.spark - create call graph and points-to analysis
         //   wjtp     - main TIRO analysis (path extraction and constraint generation)
 
-        PackManager.v().getPack("wjpp").add(new Transform("wjpp.AndroidCallGraphPatching",
-                new AndroidCallGraphPatching(manifestAnalysis)));
+        // PackManager.v().getPack("wjpp").add(new Transform("wjpp.AndroidCallGraphPatching",
+        //         new AndroidCallGraphPatching(manifestAnalysis)));
 
         DependencyAnalysis dependencyAnalysis = new DependencyAnalysis(resourceAnalysis,
                 entryPointAnalysis);
@@ -105,9 +105,9 @@ public class TIROStaticAnalysis {
                 manifestAnalysis, entryPointAnalysis, dependencyAnalysis);
 
         CallGraphTraversal callGraphTraversal = new CallGraphTraversal(entryPointAnalysis);
-        callGraphTraversal.addPlugin(targetedPathsAnalysis.getCallGraphPlugin());
-        dependencyAnalysis.getCallGraphPlugins().forEach(
-                p -> { callGraphTraversal.addPlugin(p); });
+        //callGraphTraversal.addPlugin(targetedPathsAnalysis.getCallGraphPlugin());
+        //dependencyAnalysis.getCallGraphPlugins().forEach(
+        //        p -> { callGraphTraversal.addPlugin(p); });
 
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.CallGraphTraversal",
                 callGraphTraversal));
