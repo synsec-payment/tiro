@@ -105,7 +105,7 @@ public class TIROStaticAnalysis {
                 manifestAnalysis, entryPointAnalysis, dependencyAnalysis);
 
         CallGraphTraversal callGraphTraversal = new CallGraphTraversal(entryPointAnalysis);
-        //callGraphTraversal.addPlugin(targetedPathsAnalysis.getCallGraphPlugin());
+        callGraphTraversal.addPlugin(targetedPathsAnalysis.getCallGraphPlugin());
         //dependencyAnalysis.getCallGraphPlugins().forEach(
         //        p -> { callGraphTraversal.addPlugin(p); });
 

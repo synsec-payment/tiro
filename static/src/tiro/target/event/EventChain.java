@@ -67,6 +67,7 @@ public class EventChain {
     private String getTarget() {
         // Target of an event chain should always be an invoke statement
         Stmt targetStmt = (Stmt)_events.get(0).getPath().getTargetUnit();
-        return targetStmt.getInvokeExpr().getMethodRef().getSignature();
+        //return targetStmt.getInvokeExpr().getMethodRef().getSignature();
+        return targetStmt.toString();
     }
 }

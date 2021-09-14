@@ -178,6 +178,13 @@ public class TargetedPathsAnalysis extends SceneTransformer {
     }
 
     private EventChain analyzeTargetedPath(CallPath callPath) {
+        callPath.print();
+        for (Edge edge : callPath.getEdges()) {
+            Output.debug("[edge] : ");
+            Output.debug("src : " + edge.getSrc().toString());
+            Output.debug("srcStmt : " + edge.srcStmt().toString());
+            Output.debug("tgt : " + edge.getTgt().toString());
+        }
         ConstraintAnalysis constraintAnalysis = new ConstraintAnalysis(callPath);
         Predicate pathConstraints = constraintAnalysis.getConstraints();
         if (pathConstraints != null && pathConstraints.isFalse()) {
@@ -249,31 +256,37 @@ public class TargetedPathsAnalysis extends SceneTransformer {
         @Override
         public boolean processUnit(SootMethod method, Unit unit) {
             Stmt stmt = (Stmt)unit;
-            if (!stmt.containsInvokeExpr()) {
+            if (method.getName().contains("processCommandApdu")
+                    && (stmt instanceof ReturnStmt || stmt instanceof ReturnVoidStmt)) {
+                return true;
+            } else {
                 return false;
             }
-
-            InvokeExpr invokeExpr = stmt.getInvokeExpr();
-            String invokeSignature = invokeExpr.getMethodRef().getSignature();
-            boolean isTarget = false;
-
-            // Analyze declared target of edge
-            if (TIROStaticAnalysis.Config.TargetMethods.contains(invokeSignature)) {
-                isTarget = true;
-            }
-
-            // Analyze resolved targets of edge
-            Iterator<Edge> targetEdgeIter = Scene.v().getCallGraph().edgesOutOf(stmt);
-            while (targetEdgeIter.hasNext()) {
-                Edge targetEdge = targetEdgeIter.next();
-                String tgtSignature = targetEdge.tgt().getSignature();
-
-                if (TIROStaticAnalysis.Config.TargetMethods.contains(tgtSignature)) {
-                    isTarget = true;
-                }
-            }
-
-            return isTarget;
+//            if (!stmt.containsInvokeExpr()) {
+//                return false;
+//            }
+//
+//            InvokeExpr invokeExpr = stmt.getInvokeExpr();
+//            String invokeSignature = invokeExpr.getMethodRef().getSignature();
+//            boolean isTarget = false;
+//
+//            // Analyze declared target of edge
+//            if (TIROStaticAnalysis.Config.TargetMethods.contains(invokeSignature)) {
+//                isTarget = true;
+//            }
+//
+//            // Analyze resolved targets of edge
+//            Iterator<Edge> targetEdgeIter = Scene.v().getCallGraph().edgesOutOf(stmt);
+//            while (targetEdgeIter.hasNext()) {
+//                Edge targetEdge = targetEdgeIter.next();
+//                String tgtSignature = targetEdge.tgt().getSignature();
+//
+//                if (TIROStaticAnalysis.Config.TargetMethods.contains(tgtSignature)) {
+//                    isTarget = true;
+//                }
+//            }
+//
+//            return isTarget;
         }
 
         @Override
