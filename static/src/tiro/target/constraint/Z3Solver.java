@@ -152,6 +152,16 @@ public class Z3Solver {
         //}
 
         if (constraint.isExpression()) {
+            Output.debug("boolean expression." + constraint.toString());
+        } else if (constraint.isUnary()) {
+            Output.debug("unary expression." + constraint.toString());
+        } else if (constraint.isBinary()) {
+            Output.debug("binary expression." + constraint.toString());
+        } else {
+            Output.debug("undefined expression." + constraint.toString());
+        }
+
+        if (constraint.isExpression()) {
             return (BoolExpr)generateExpr(((ExpressionPredicate)constraint).getExpression());
         } else if (constraint.isUnary()) {
             BoolExpr leftExpr = generateBoolExpr(((UnaryPredicate)constraint).getChild());
